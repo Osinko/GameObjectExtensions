@@ -1,8 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\Mod1\Assets\PathTest1.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\GameObjectExtensions.cs">
     <Files>
-      <File FileName="..\Mod1\Assets\PathTest1.cs" Line="22" Column="3" />
+      <File FileName="Assets\GameObjectExtensions.cs" Line="546" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

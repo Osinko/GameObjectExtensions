@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 
 public class GameObjectExtensions : MonoBehaviour
@@ -39,8 +40,6 @@ public struct IntVector2
 		{
 				return this.x >= 0 && this.x < range.x && this.z >= 0 && this.z < range.z;
 		}
-	
-	
 	
 		/// <summary>
 		/// 乱数を返す
@@ -158,7 +157,125 @@ public static partial class TransformExtensions
 /// </summary>
 public static class MathfUtils
 {
-		//ユークリッドの互除法
+		/// <summary>
+		/// 組み合わせの文字列リストを出力する
+		/// </summary>
+		/// <param name="n">全要素数</param>
+		/// <param name="r">選ぶ数</param>
+		/// <param name="strList">収納するstring型のリスト</param>
+		static void CombinationNumbers (int n, int r, List <string> strList)
+		{
+				int[] numbers = new int[r + 1];
+				CombinationNest (n, r, 1, 1, numbers, strList);
+		}
+	
+		static void CombinationNest (int n, int r, int nest, int columns, int[] numbers, List <string> strList)
+		{
+				for (int i = nest; i <= n-r+columns; i++) {
+						numbers [columns] = i;
+						if (columns != r) {
+								CombinationNest (n, r, i + 1, columns + 1, numbers, strList);
+						} else {
+								string str = "";
+								for (int j = 1; j < numbers.Length; j++) {
+										str += numbers [j] + ",";
+								}
+								strList.Add (str);
+						}
+				}
+		}
+	
+	
+		/// <summary>
+		/// 順列の数を求める
+		/// </summary>
+		/// <param name="n">全要素数</param>
+		/// <param name="r">選ぶ数</param>
+		public static float PermutationNum (int n, int r)
+		{
+				return  Factor (n) / Factor (n - r);
+		}
+	
+	
+		/// <summary>
+		/// 組み合わせの数を求める
+		/// </summary>
+		/// <param name="n">全要素数</param>
+		/// <param name="r">選ぶ数</param>
+		public static int CombinationNum (int n, int r)
+		{
+				return  Factor (n) / (Factor (n - r) * Factor (r));
+		}
+	
+	
+		/// <summary>
+		/// 互いに素か判定する（互いに素だった場合true）
+		/// </summary>
+		/// <returns><c>true</c> if is coprime the specified x y; otherwise, <c>false</c>.</returns>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		public static bool IsCoprime (float x, float y)
+		{
+				while (x!=y) {
+						if (x > y) {
+								x -= y;
+						} else {
+								y -= x;
+						}
+				}
+				return x == 1;
+		}
+	
+	
+		/// <summary>
+		/// 階乗計算
+		/// </summary>
+		/// <param name="n">数</param>
+		public static int Factor (int n)
+		{
+				int ans = 1;
+				for (int i=2; i <= n; i++) {
+						ans *= i;
+				}
+				return ans;
+		}
+	
+	
+		/// <summary>
+		/// 二分検索（このアルゴリズムはよく出来たので他でも使うとよい）
+		/// </summary>
+		/// <returns>The search.</returns>
+		/// <param name="n">N.</param>
+		/// <param name="list">List.</param>
+		public static int  TreeSearch (float n, float[] list)
+		{
+				float start = 0;
+				float end = list.Length;
+				int mid;
+		
+				while (true) {
+						mid = (int)(end - start) / 2;
+						if (mid < 1)
+								break;
+						mid += (int)start;
+			
+						if (n > list [mid]) {
+								start = mid;
+						} else {
+								end = mid;
+						}
+						//print (start + "  " + mid + "  " + end);
+				}
+				return mid + (int)start;
+		}
+	
+	
+		/// <summary>
+		///ユークリッドの互除法
+		///最小公約数を返す
+		/// </summary>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
 		public static float Gcd (float x, float y)
 		{
 				while (y!=0) {
@@ -167,6 +284,53 @@ public static class MathfUtils
 						y = z;
 				}
 				return x;
+		}
+	
+		/// <summary>
+		///ユークリッドの互除法
+		///最小公約数を返す。足算引き算のみの計算（高速？）
+		/// </summary>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		public static float Gcd2 (float x, float y)
+		{
+				while (x!=y) {
+						if (x > y) {
+								x -= y;
+						} else {
+								y -= x;
+						}
+				}
+				return x;
+		}
+	
+		/// <summary>
+		///ユークリッドの互除法
+		///分数として扱い各値を約分する
+		/// </summary>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		public static void Gcd (ref float x, ref float y)
+		{
+				float xx = x;
+				float yy = y;
+				while (yy!=0) {
+						float z = xx % yy;
+						xx = yy;
+						yy = z;
+				}
+				x /= xx;
+				y /= xx;
+		}
+	
+		/// <summary>
+		/// 最大公約数を返す
+		/// </summary>
+		/// <param name="x">The x coordinate.</param>
+		/// <param name="y">The y coordinate.</param>
+		public static float Lcm (float x, float y)
+		{
+				return x * y / Gcd (x, y);
 		}
 	
 	
@@ -184,9 +348,14 @@ public static class MathfUtils
 				rhs = temp;
 		}
 	
-	
-		///ブレゼンハムのアルゴリズム（４象限対応）
-		///始点(x0, y0),終点(x1, y1);
+		/// <summary>
+		/// ブレゼンハムのアルゴリズム（４象限対応）
+		/// </summary>
+		/// <returns>The line.</returns>
+		/// <param name="x0">始点X0.</param>
+		/// <param name="y0">始点Y0.</param>
+		/// <param name="x1">終点x1</param>
+		/// <param name="y1">終点y1</param>
 		public static IEnumerable<Vector2>  BresenhamsLine (int x0, int y0, int x1, int y1)
 		{
 				//正=true,負＝false
