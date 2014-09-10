@@ -25,12 +25,12 @@ public struct IntVector2
 				a.z += b.z;
 				return a;
 		}
-	
-		// <summary>
-		// 範囲内であるか調べます。範囲内であればtrueを返す
-		// </summary>
-		// <param name="a">調べたい値</param>
-		// <param name="b">範囲を指定する値</param>
+
+		/// <summary>
+		/// 範囲内であるか調べます。範囲内であればtrueを返す
+		/// </summary>
+		/// <param name="value">調べたい値</param>
+		/// <param name="range">範囲を指定する値</param>
 		public static bool Contains (IntVector2 value, IntVector2 range)
 		{
 				return value.x >= 0 && value.x < range.x && value.z >= 0 && value.z < range.z;
@@ -157,6 +157,27 @@ public static partial class TransformExtensions
 /// </summary>
 public static class MathfUtils
 {
+		public static void PermutationNumber (int n, int r, List <string> strList)
+		{
+				var number = Enumerable.Range (1, n).Select (x => x).ToArray ();
+				PermutationNest (number, r, 0, "", strList);
+		}
+	
+		public static void PermutationNest (int[] n, int r, int columns, string resume, List <string> strList)
+		{
+				if (columns < r) {
+						columns++;
+						for (int i = 0; i < n.Length; i++) {
+								string resumeClone = resume + n [i].ToString () + ",";
+								int[] numClone = n.Where (x => x != n [i]).ToArray ();
+								PermutationNest (numClone, r, columns, resumeClone, strList);
+						}
+				} else {
+						strList.Add (resume);
+				}
+		}
+
+
 		/// <summary>
 		/// 組み合わせの文字列リストを出力する
 		/// </summary>
