@@ -13,13 +13,20 @@ public class MathfUtilsExtensions : MonoBehaviour
 /// </summary>
 public static class MathfUtils
 {
+
+		/// <summary>
+		/// 順列の文字列リストを出力する
+		/// </summary>
+		/// <param name="n">全要素数</param>
+		/// <param name="r">選ぶ数</param>
+		/// <param name="strList">収納するstring型のリスト</param>
 		public static void PermutationNumber (int n, int r, List <string> strList)
 		{
 				var number = Enumerable.Range (1, n).Select (x => x).ToArray ();
 				PermutationNest (number, r, 0, "", strList);
 		}
 	
-		public static void PermutationNest (int[] n, int r, int columns, string resume, List <string> strList)
+		static void PermutationNest (int[] n, int r, int columns, string resume, List <string> strList)
 		{
 				if (columns < r) {
 						columns++;
@@ -40,7 +47,7 @@ public static class MathfUtils
 		/// <param name="n">全要素数</param>
 		/// <param name="r">選ぶ数</param>
 		/// <param name="strList">収納するstring型のリスト</param>
-		static void CombinationNumbers (int n, int r, List <string> strList)
+		public static void CombinationNumbers (int n, int r, List <string> strList)
 		{
 				int[] numbers = new int[r + 1];
 				CombinationNest (n, r, 1, 1, numbers, strList);
@@ -210,6 +217,18 @@ public static class MathfUtils
 				return x * y / Gcd (x, y);
 		}
 	
+		/// <summary>
+		/// 配列の指定要素を入れ替えます
+		/// </summary>
+		/// <param name="array">Array.</param>
+		/// <param name="i">The index.</param>
+		/// <param name="j">J.</param>
+		public static void Swap<T> (T[] array, int i, int j)
+		{
+				T temp = array [i];
+				array [i] = array [j];
+				array [j] = temp;
+		}
 	
 		/// <summary>
 		/// 値を入れ替えるジェネリック関数
