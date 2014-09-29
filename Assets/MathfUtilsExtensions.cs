@@ -15,6 +15,18 @@ public static class MathfUtils
 {
 
 		/// <summary>
+		/// 三角関数の加法定理の公式
+		/// </summary>
+		/// <returns>加算され回転した位置</returns>
+		/// <param name="alphaPosition">正規化されたベクトル</param>
+		/// <param name="betaRadian">ラジアン角</param>
+		Vector2 TrigonAdditionTheorem (Vector2 alphaPosNorm, float betaRadian)
+		{
+				return new  Vector2 (alphaPosNorm.x * Mathf.Cos (betaRadian) - alphaPosNorm.y * Mathf.Sin (betaRadian),
+		                     alphaPosNorm.y * Mathf.Cos (betaRadian) + alphaPosNorm.x * Mathf.Sin (betaRadian));
+		}
+
+		/// <summary>
 		/// 順列の文字列リストを出力する
 		/// </summary>
 		/// <param name="n">全要素数</param>
